@@ -1,0 +1,55 @@
+.navbar {
+    width: 14%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    .NavBarLinks {
+        margin-top: 5em;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+
+        .NavBarLink {
+            width: 95%;
+            height: 2.8em;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            user-select: none;
+
+            .NavBarLinkSelected {
+                height: 60%;
+                width: 0.5em;
+                border-radius: 0 8px 8px 0;
+                background-color: var(--grey-light);
+                display: none;
+                transition: var(--transition);
+            }
+
+            .NavBarLinkText {
+                margin-left: 1em;
+                font-size: 1.1em;
+                font-weight: 500;
+                color: var(--grey);
+                transition: var(--transition);
+            }
+        }
+
+        .NavBarLink:hover {
+            background-color: #191919;
+
+            .NavBarLinkText {
+                color: var(--grey-light);
+            }
+        }
+    }
+}
