@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import Icon from '../../src/lib/icons';
 import FileUpload from '../FileUpload';
-import uploadFile from '@/lib/upload'
-import getUnitTests from '@/lib/getUnitTests';
+import { uploadFile, getUnitTests, deleteFile } from '@/lib/';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import Skeleton from '@mui/material/Skeleton';
 
 import styles from './allTests.module.scss';
-import deleteFile from '@/lib/deleteFile';
 
 interface AllTestsProps {
     linkSelected: string;
@@ -22,10 +21,12 @@ const AllTests = ({
 }: AllTestsProps) => {
     const [files, setFiles] = useState<File[]>([]);
     const [fileNames, setFileNames] = useState<string>("");
-    const [filePaths, setFilePaths] = useState<string>("");
     const [result, setResult] = useState<string>("");
     const [nbTest, setNbTest] = useState<number>(-1);
     let icon = Icon({ fileName: fileNames });
+
+    const lines = "....................." // 20 lines
+    const nbLines = lines.split('');
 
     const onFileUpload = async (file: File[]) => {
         setFiles(file);
@@ -33,7 +34,6 @@ const AllTests = ({
         setFileNames(fileNames[0]);
         setIsFile(true);
         const filePath = await uploadFile(file[0]);
-        setFilePaths(filePath);
         const { testResult, numberOfTests } = await getUnitTests(filePath);
         setResult(testResult);
         setNbTest(numberOfTests);
@@ -44,7 +44,6 @@ const AllTests = ({
         setResult("");
         setNbTest(-1);
         const filePaths = await uploadFile(files[0]);
-        setFilePaths(filePaths);
         const { testResult, numberOfTests } = await getUnitTests(filePaths);
         setResult(testResult);
         setNbTest(numberOfTests);
@@ -53,7 +52,6 @@ const AllTests = ({
 
     const handleChange = () => {
         setFileNames("");
-        setFilePaths("");
         setResult("");
         setNbTest(-1);
         setIsFile(false);
@@ -115,16 +113,30 @@ const AllTests = ({
                         </div>
                     )}
                 </div>
-                {(isFile && linkSelected === 'file' && result) && (
+                {(isFile && linkSelected === 'file' && result) ? (
                     <div className={styles.resultContent}>
                         <SyntaxHighlighter
                             language="typescript"
                             wrapLines
+                            wrapLongLines
                             ustomStyle={{ lineHeight: '1.4em' }}
                             style={{ ...vscDarkPlus, ...oneDarkProMixColors }}
                         >
                             {result}
                         </SyntaxHighlighter>
+                    </div>
+                ) : (isFile && linkSelected === 'file') && (
+                    <div className={styles.resultContent}>
+                        {nbLines.map((index) => (
+                            <Skeleton
+                                key={index}
+                                variant="text"
+                                width={Math.floor(Math.random() * 100) + 1 + '%'}
+                                height={20}
+                                animation="wave"
+                                style={{ marginBottom: 5 }}
+                            />
+                        ))}
                     </div>
                 )}
             </div>

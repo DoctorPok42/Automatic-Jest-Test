@@ -11,6 +11,13 @@ export const config = {
 export default async function convertLink(req: any, res: any) {
     try {
         let filePath = '';
+
+        setTimeout(() => {
+            if (filePath.length < 1) {
+                return res.status(500).json({ error: 'Something went wrong' });
+            }
+        }, 10000);
+
         await upload.single('file')(req, res, (err: any) => {
             if (err) {
                 return res.status(500).json({ error: 'Something went wrong' });

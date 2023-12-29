@@ -2,7 +2,6 @@ const deleteFile = async (
     filePath: string
 ) => {
     try {
-      console.log(filePath)
       const response = await fetch('/api/delete', {
         method: 'POST',
         body: JSON.stringify({

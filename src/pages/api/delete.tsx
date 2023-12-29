@@ -4,6 +4,10 @@ export default async function convertLink(req: any, res: any) {
     try {
         const { filePath } = JSON.parse(req.body);
 
+        if (!filePath || filePath.length < 1) {
+            return res.status(400).json({ error: 'No file path' });
+        }
+
         fs.unlink(filePath, (err) => {
             if (err) {
                 console.error(err);
