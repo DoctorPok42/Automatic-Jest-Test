@@ -10,15 +10,12 @@ import styles from './allTests.module.scss';
 
 interface AllTestsProps {
     linkSelected: string;
-    isFile: boolean;
-    setIsFile: (isFile: boolean) => void;
 }
 
 const AllTests = ({
     linkSelected,
-    isFile,
-    setIsFile,
 }: AllTestsProps) => {
+    const [isFile, setIsFile] = useState<boolean>(false)
     const [files, setFiles] = useState<File[]>([]);
     const [fileNames, setFileNames] = useState<string>("");
     const [result, setResult] = useState<string>("");
@@ -70,76 +67,74 @@ const AllTests = ({
 
     return (
         <div className={styles.allTestsContainer}>
-            <div className={styles.allTests}>
-                {(!isFile && linkSelected === 'file') &&
-                    <div className={styles.uploadFile}>
-                        <FileUpload onFileUpload={onFileUpload} />
-                    </div>
-                }
-
-                <div className={styles.fileDesc}>
-                    {(isFile && linkSelected === 'file') && (
-                        <div className={styles.file}>
-                            <div className={styles.fileIcon}>
-                                {icon}
-                            </div>
-                            <div className={styles.fileName}>
-                                <h2>{fileNames.length > 22 ? fileNames.substring(0, 22) + "..." : fileNames}</h2>
-                            </div>
-                        </div>
-                    )}
-
-                    {(isFile && linkSelected === 'file' && nbTest !== -1) && (
-                        <div className={styles.text}>
-                            <div className={styles.title}>
-                                <h2>Number of tests: {nbTest}</h2>
-                            </div>
-                        </div>
-                    )}
-
-                    {(isFile && linkSelected === 'file' && result) && (
-                        <div className={styles.button}>
-                            <div className={styles.title}>
-                                <h2 onClick={handleRegenerate}>Regenerate</h2>
-                            </div>
-                        </div>
-                    )}
-
-                    {(isFile && linkSelected === 'file' && result) && (
-                        <div className={styles.button}>
-                            <div className={styles.title}>
-                                <h2 onClick={handleChange}>Change File</h2>
-                            </div>
-                        </div>
-                    )}
+            {!isFile &&
+                <div className={styles.uploadFile}>
+                    <FileUpload onFileUpload={onFileUpload} />
                 </div>
-                {(isFile && linkSelected === 'file' && result) ? (
-                    <div className={styles.resultContent}>
-                        <SyntaxHighlighter
-                            language="typescript"
-                            wrapLines
-                            wrapLongLines
-                            ustomStyle={{ lineHeight: '1.4em' }}
-                            style={{ ...vscDarkPlus, ...oneDarkProMixColors }}
-                        >
-                            {result}
-                        </SyntaxHighlighter>
+            }
+
+            <div className={styles.fileDesc}>
+                {isFile && (
+                    <div className={styles.file}>
+                        <div className={styles.fileIcon}>
+                            {icon}
+                        </div>
+                        <div className={styles.fileName}>
+                            <h2>{fileNames.length > 22 ? fileNames.substring(0, 22) + "..." : fileNames}</h2>
+                        </div>
                     </div>
-                ) : (isFile && linkSelected === 'file') && (
-                    <div className={styles.resultContent}>
-                        {nbLines.map((index) => (
-                            <Skeleton
-                                key={index}
-                                variant="text"
-                                width={Math.floor(Math.random() * 100) + 1 + '%'}
-                                height={20}
-                                animation="wave"
-                                style={{ marginBottom: 5 }}
-                            />
-                        ))}
+                )}
+
+                {(isFile && nbTest !== -1) && (
+                    <div className={styles.text}>
+                        <div className={styles.title}>
+                            <h2>Number of tests: {nbTest}</h2>
+                        </div>
+                    </div>
+                )}
+
+                {(isFile && result) && (
+                    <div className={styles.button}>
+                        <div className={styles.title}>
+                            <h2 onClick={handleRegenerate}>Regenerate</h2>
+                        </div>
+                    </div>
+                )}
+
+                {(isFile && result) && (
+                    <div className={styles.button}>
+                        <div className={styles.title}>
+                            <h2 onClick={handleChange}>Change File</h2>
+                        </div>
                     </div>
                 )}
             </div>
+            {(isFile && result) ? (
+                <div className={styles.resultContent}>
+                    <SyntaxHighlighter
+                        language="typescript"
+                        wrapLines
+                        wrapLongLines
+                        ustomStyle={{ lineHeight: '1.4em' }}
+                        style={{ ...vscDarkPlus, ...oneDarkProMixColors }}
+                    >
+                        {result}
+                    </SyntaxHighlighter>
+                </div>
+            ) : isFile && (
+                <div className={styles.resultContent}>
+                    {nbLines.map((index) => (
+                        <Skeleton
+                            key={index}
+                            variant="text"
+                            width={Math.floor(Math.random() * 100) + 1 + '%'}
+                            height={20}
+                            animation="wave"
+                            style={{ marginBottom: 5 }}
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

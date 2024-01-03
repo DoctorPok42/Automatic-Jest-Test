@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import { AllTests, NavBar } from '../../Components'
+import { NavBar, MainBox } from '../../Components'
 import Head from 'next/head'
 
 const Home = () => {
-  const [linkSelected, setLinkSelected] = useState<string>('file')
-  const [isFile, setIsFile] = useState<boolean>(false)
+  const [linkSelected, setLinkSelected] = useState<'file' | 'code' | 'params'>('file')
 
   return (
     <>
@@ -16,11 +15,7 @@ const Home = () => {
 
       <main className="container">
         <NavBar linkSelected={linkSelected} setLinkSelected={setLinkSelected} />
-        <AllTests
-          linkSelected={linkSelected}
-          isFile={isFile}
-          setIsFile={setIsFile}
-        />
+        <MainBox linkSelected={linkSelected} />
       </main>
     </>
   )

@@ -3,8 +3,8 @@ import React from 'react';
 import styles from './style.module.scss';
 
 interface NavBarProps {
-    linkSelected: string;
-    setLinkSelected: (link: string) => void;
+    linkSelected: 'file' | 'code' | 'params';
+    setLinkSelected: (link: 'file' | 'code' | 'params') => void;
 }
 
 const NavBar = ({
@@ -17,6 +17,9 @@ const NavBar = ({
     }, {
         name: "Code",
         value: "code"
+    }, {
+        name: "Params",
+        value: "params"
     }]
 
     return (
@@ -26,11 +29,12 @@ const NavBar = ({
                     <div
                         key={index}
                         className={styles.NavBarLink}
-                        onClick={() => setLinkSelected(link.value)}
+                        onClick={() => setLinkSelected(link.value as 'file' | 'code' | 'params')}
                     >
                         <p className={styles.NavBarLinkSelected} style={{
                             display: linkSelected === link.value ? "block" : "none"
                         }} />
+
                         <h2
                             className={styles.NavBarLinkText}
                             style={{...linkSelected === link.value && {
